@@ -1,0 +1,19 @@
+td {
+	border: 1px solid black;
+	color: lightgrey;
+	padding: 0px 5px;
+	background: lightgrey;
+	cursor: default;
+}
+
+
+body, div{
+	text-align: center;
+	align-items: center;
+}
+
+table {
+	margin-left: auto;
+	margin-right: auto;
+	border-collapse: collapse;
+}
