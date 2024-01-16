@@ -210,7 +210,10 @@ function finPartie(status){
 	msgElement.innerHTML = msg
 	
 	const listeCases = Array.from(document.querySelectorAll('td'))
-	listeCases.forEach(elt => elt.removeEventListener('click', handler))
+	listeCases.forEach(function(elt){
+		elt.removeEventListener('click', handler)
+		elt.removeEventListener('contextmenu', handleRightClick)
+	})
 	
 }
 
