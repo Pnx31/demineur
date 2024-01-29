@@ -3,7 +3,11 @@ const niveauElement = document.getElementById("choix-niveau")
 const boutonNouvellePartie = document.getElementById("btn-nouvelle-partie")
 const msgElement = document.getElementById ("message")
 const compteurMinesElement = document.getElementById('compteur-mines')
+const compteurTempsElement = document.getElementById('compteur-temps')
 let deja_vu = Array()
+let compteur_en_marche = false
+let t1 = 0
+let t = 0
 
 
 let coteA = 0		// hauteur
@@ -19,6 +23,8 @@ function lancerJeu(){
 	let niveau = niveauElement.value
 	nbFlag = 0
 	actualiserCompteurMines()
+	compteurTempsElement.innerHTML = '000'
+	compteur_en_marche = false
 	genererGrille(niveau)
 	afficherGrille()
 
@@ -73,6 +79,11 @@ function genererGrille(niveau){
 
 function ouvrirCase(i){
 	const caseElement = document.getElementById(i)
+	if (compteur_en_marche == false){
+		compteur_en_marche = true
+		t1 = Date.now()
+		interval = setInterval(actualiserCompteurTemps, 1000)
+	}
 	if (caseElement.drapeau != 1){
 		if (deja_vu.indexOf(i) === -1){deja_vu.push(i)}
 		caseElement.ouvert = true
@@ -208,11 +219,17 @@ function checkFinPartie(){
 function finPartie(status){
 	let msg = (status === true ? "Félicitations, vous avez gagné!" : "Boom! Try again")
 	msgElement.innerHTML = msg
-	
+	clearInterval(interval)
 	const listeCases = Array.from(document.querySelectorAll('td'))
 	listeCases.forEach(function(elt){
 		elt.removeEventListener('click', handler)
 		elt.removeEventListener('contextmenu', handleRightClick)
+		if (elt.drapeau != 1 && elt.ouvert == false && grille[elt.id] == -1){
+			elt.innerHTML = 'x'
+			elt.style.color = 'black'
+		} else if (elt.drapeau == 1 && grille[elt.id] != -1) {
+			elt.style.backgroundColor = 'red'
+		}
 	})
 	
 }
@@ -220,6 +237,12 @@ function finPartie(status){
 
 function actualiserCompteurMines(){
 	compteurMinesElement.innerHTML = `${nbFlag}/${nbMines}`
+}
+
+
+function actualiserCompteurTemps(){
+	t = Math.floor((Date.now() - t1)/1000)
+	compteurTempsElement.innerHTML = String(t).padStart(3,'0')
 }
 
 boutonNouvellePartie.addEventListener('click', lancerJeu)
