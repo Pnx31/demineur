@@ -23,6 +23,7 @@ function lancerJeu(){
 	let niveau = niveauElement.value
 	nbFlag = 0
 	actualiserCompteurMines()
+	if (typeof(interval) != 'undefined'){clearInterval(interval)}
 	compteurTempsElement.innerHTML = '000'
 	compteur_en_marche = false
 	genererGrille(niveau)
